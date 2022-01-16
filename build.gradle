@@ -1,6 +1,7 @@
 plugins {
-    id 'org.jetbrains.kotlin.jvm' version "1.6.10"
-    id "org.jetbrains.kotlin.plugin.allopen" version "1.6.10"
+    id 'java'
+    id 'org.jetbrains.kotlin.jvm' version "1.5.31"
+    id "org.jetbrains.kotlin.plugin.allopen" version "1.5.31"
     id 'io.quarkus'
 }
 
@@ -15,8 +16,10 @@ dependencies {
     implementation 'io.quarkus:quarkus-resteasy-reactive'
     implementation 'io.quarkus:quarkus-kotlin'
 //    implementation 'io.quarkus:quarkus-resteasy-jackson'
-    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib'
     implementation 'io.quarkus:quarkus-arc'
+    implementation 'io.quarkus:quarkus-smallrye-openapi'
+
     testImplementation 'io.quarkus:quarkus-junit5'
     testImplementation 'io.rest-assured:rest-assured'
 }
