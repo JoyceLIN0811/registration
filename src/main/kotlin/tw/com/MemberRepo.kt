@@ -6,6 +6,7 @@ import com.mongodb.client.MongoCollection
 import com.mongodb.client.model.Filters
 import io.quarkus.mongodb.reactive.ReactiveMongoClient
 import io.quarkus.mongodb.reactive.ReactiveMongoCollection;
+import io.smallrye.mutiny.Uni
 import org.bson.types.ObjectId
 import org.eclipse.microprofile.config.inject.ConfigProperty
 import java.util.*
@@ -43,15 +44,24 @@ class MemberRepo {
             .withWriteConcern(WriteConcern.ACKNOWLEDGED)
     }
 
-    fun insertUser(username: String): User?{
-        val user = User(
-            username = username,
-            createDate = Date()
-        )
+    fun getUserList(): Uni<List<User>> {
+        return reactiveCollUserModel.find().collect().asList()
+    }
+
+    fun getUser(username: String?): Uni<User?> {
+        return reactiveCollUserModel.find(Filters.eq("username",username)).collect().first()
+    }
+
+    fun insertUser(user: User): User{
         try {
-            collUserModel.insertOne(user)
+            val result = collUserModel.insertOne(user)
+            if(result.wasAcknowledged()){
+                val userId = result.insertedId!!.asObjectId().value
+                user._id = userId
+            }
         }catch (e: Exception){
             println(e.message)
+            val username = user.username
             val filters = Filters.regex("username","/^$username/")
             val list = collUserModel.find(filters).toList()
             val numList = mutableListOf<Int>()
@@ -63,7 +73,11 @@ class MemberRepo {
             }
             var num = numList.maxOrNull()?:1
             user.username = "${username}${++num}"
-            collUserModel.insertOne(user)
+            val result = collUserModel.insertOne(user)
+            if(result.wasAcknowledged()){
+                val userId = result.insertedId!!.asObjectId().value
+                user._id = userId
+            }
         }
         return user
     }
@@ -77,8 +91,10 @@ class MemberRepo {
         }
     }
 
+
     data class User(
             var _id: ObjectId? = null,
+            var userId: String? = null,
             var username: String? = null,
             var createDate: Date? = null,
     )
