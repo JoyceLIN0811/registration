@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Registration</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+    <link href="./static/css/registration.css" rel="stylesheet">
+</head>
+
+<body class="text-center">
+<form class="form-signin" id="userRegistrationPage">
+    <img src="./static/img/social-media.png" style="width: 80%; height: 80%">
+    <h1 class="h3 mb-3 font-weight-normal">建立帳號</h1>
+    <label for="inputUserId" class="sr-only">使用者帳號</label>
+    <input type="text" v-model="userId" id="inputUserId" class="form-control" placeholder="帳號" required autofocus>
+    <label for="inputUsername" class="sr-only">使用者名稱</label>
+    <input type="text" v-model="username" id="inputUsername" class="form-control" placeholder="名稱" required>
+
+    <button class="btn btn-lg btn-primary btn-block" @click="register">註冊</button>
+</form>
+
+<section id="modal" class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content" style="background-color: #f9f3e2;">
+            <div class="modal-header">
+                <h6 id="modal-message" class="modal-title" style="color: #652707;"></h6>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="./static/js/registration.js"></script>
+
+</body>
+</html>

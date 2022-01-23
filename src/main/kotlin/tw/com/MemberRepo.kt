@@ -61,18 +61,24 @@ class MemberRepo {
             }
         }catch (e: Exception){
             println(e.message)
-            val username = user.username
+            val username = user.username!!
             val filters = Filters.regex("username","/^$username/")
             val list = collUserModel.find(filters).toList()
+            println("list=$list")
+
             val numList = mutableListOf<Int>()
             list.forEach {
-                val result = convertStringToInt(it.username!!.substringAfter("a"))
+                val result = convertStringToInt(it.username!!.substringAfter(username))
                 if(result != null){
                     numList.add(result)
                 }
             }
+            println("numList=$numList")
             var num = numList.maxOrNull()?:1
-            user.username = "${username}${++num}"
+            val newUsername = "${username}${++num}"
+            user.username = newUsername
+            println("newUsername=$newUsername")
+
             val result = collUserModel.insertOne(user)
             if(result.wasAcknowledged()){
                 val userId = result.insertedId!!.asObjectId().value
