@@ -51,5 +51,11 @@ class MemberCtrl {
         }
     }
 
-
+    @GET
+    @Path("/checkUserId")
+    fun checkUserId(
+        @QueryParam("userId") userId: String
+    ): Uni<Boolean>{
+        return memberSvc.checkUserIdIsExist(userId)
+    }
 }

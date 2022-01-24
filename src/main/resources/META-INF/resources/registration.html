@@ -5,6 +5,8 @@
     <title>Registration</title>
     <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/e7d0b12d4a.js" crossorigin="anonymous"></script>
+
     <style>
         .bd-placeholder-img {
             font-size: 1.125rem;
@@ -21,16 +23,25 @@
 </head>
 
 <body class="text-center">
-<form class="form-signin" id="userRegistrationPage">
+<div class="form-signin" id="userRegistrationPage">
     <img src="./static/img/social-media.png" style="width: 80%; height: 80%">
     <h1 class="h3 mb-3 font-weight-normal">建立帳號</h1>
-    <label for="inputUserId" class="sr-only">使用者帳號</label>
-    <input type="text" v-model="userId" id="inputUserId" class="form-control" placeholder="帳號" required autofocus>
-    <label for="inputUsername" class="sr-only">使用者名稱</label>
-    <input type="text" v-model="username" id="inputUsername" class="form-control" placeholder="名稱" required>
 
-    <button class="btn btn-lg btn-primary btn-block" @click="register">註冊</button>
-</form>
+    <div class="input-group mb-3 ml-4" :style="isAvailableUserId == null?'width: 85%':''">
+        <label for="inputUserId" class="sr-only">使用者帳號</label>
+        <input type="text" v-model="userId" id="inputUserId" @change="checkIsExistsUserId"
+               class="form-control" placeholder="帳號" required autofocus>
+        <div class="input-group-append">
+            <i v-if="isAvailableUserId == true" class="far fa-check-circle" style="color: green; font-size: 30px; margin: 7px 5px; padding-left: 5px"></i>
+            <i v-if="isAvailableUserId == false" class="far fa-times-circle" style="color: red; font-size: 30px; margin: 7px 5px; padding-left: 5px"></i>
+        </div>
+    </div>
+
+    <label for="inputUsername" class="sr-only">使用者名稱</label>
+    <input type="text" v-model="username" id="inputUsername" class="form-control mb-3 ml-4" style="width: 85%;" placeholder="名稱" required>
+
+    <button class="btn btn-lg btn-primary btn-block ml-4" style="width: 85%;" @click="register">註冊</button>
+</div>
 
 <section id="modal" class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -42,6 +53,8 @@
     </div>
 </section>
 
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 <script src="./static/js/registration.js"></script>
 
 </body>

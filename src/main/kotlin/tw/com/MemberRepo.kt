@@ -6,10 +6,12 @@ import com.mongodb.client.MongoCollection
 import com.mongodb.client.model.Filters
 import io.quarkus.mongodb.reactive.ReactiveMongoClient
 import io.quarkus.mongodb.reactive.ReactiveMongoCollection;
+import io.smallrye.mutiny.Multi
 import io.smallrye.mutiny.Uni
 import org.bson.types.ObjectId
 import org.eclipse.microprofile.config.inject.ConfigProperty
 import java.util.*
+import java.util.regex.Pattern
 import javax.annotation.PostConstruct
 import javax.enterprise.context.ApplicationScoped
 import javax.inject.Inject
@@ -52,6 +54,10 @@ class MemberRepo {
         return reactiveCollUserModel.find(Filters.eq("username",username)).collect().first()
     }
 
+    fun getUserByUserId(userId: String?): Multi<User> {
+        return reactiveCollUserModel.find(Filters.eq("userId",userId))
+    }
+
     fun insertUser(user: User): User{
         try {
             val result = collUserModel.insertOne(user)
@@ -62,10 +68,9 @@ class MemberRepo {
         }catch (e: Exception){
             println(e.message)
             val username = user.username!!
-            val filters = Filters.regex("username","/^$username/")
+            val pattern = Pattern.compile("^$username.*\$", Pattern.CASE_INSENSITIVE)
+            val filters = Filters.regex("username",pattern)
             val list = collUserModel.find(filters).toList()
-            println("list=$list")
-
             val numList = mutableListOf<Int>()
             list.forEach {
                 val result = convertStringToInt(it.username!!.substringAfter(username))
@@ -73,17 +78,10 @@ class MemberRepo {
                     numList.add(result)
                 }
             }
-            println("numList=$numList")
             var num = numList.maxOrNull()?:1
             val newUsername = "${username}${++num}"
             user.username = newUsername
-            println("newUsername=$newUsername")
-
-            val result = collUserModel.insertOne(user)
-            if(result.wasAcknowledged()){
-                val userId = result.insertedId!!.asObjectId().value
-                user._id = userId
-            }
+            insertUser(user)
         }
         return user
     }

@@ -22,6 +22,11 @@ class MemberSvc {
         return memberRepo.insertUser(user)
     }
 
+    fun checkUserIdIsExist(userId: String): Uni<Boolean>{
+        return memberRepo.getUserByUserId(userId)
+            .collect().asList().map { it.isEmpty() }
+    }
+
     fun getUsers(): Uni<List<User>> {
         return memberRepo.getUserList()
     }
