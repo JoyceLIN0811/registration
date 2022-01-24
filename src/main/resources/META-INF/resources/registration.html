@@ -31,9 +31,11 @@
         <label for="inputUserId" class="sr-only">使用者帳號</label>
         <input type="text" v-model="userId" id="inputUserId" @change="checkIsExistsUserId"
                class="form-control" placeholder="帳號" required autofocus>
-        <div class="input-group-append">
-            <i v-if="isAvailableUserId == true" class="far fa-check-circle" style="color: green; font-size: 30px; margin: 7px 5px; padding-left: 5px"></i>
-            <i v-if="isAvailableUserId == false" class="far fa-times-circle" style="color: red; font-size: 30px; margin: 7px 5px; padding-left: 5px"></i>
+        <div class="input-group-append"
+             :style="isAvailableUserId? 'color:green' : 'color:red'"
+             style="font-size: 30px; margin: 7px 5px; padding-left: 5px">
+            <i v-if="isAvailableUserId == true" class="far fa-check-circle"></i>
+            <i v-if="isAvailableUserId == false" class="far fa-times-circle"></i>
         </div>
     </div>
 
