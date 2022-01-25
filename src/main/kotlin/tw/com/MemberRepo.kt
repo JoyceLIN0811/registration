@@ -4,10 +4,11 @@ import com.mongodb.WriteConcern
 import com.mongodb.client.MongoClient
 import com.mongodb.client.MongoCollection
 import com.mongodb.client.model.Filters
+import com.mongodb.client.model.Filters.eq
+import io.quarkus.mongodb.FindOptions
 import io.quarkus.mongodb.reactive.ReactiveMongoClient
 import io.quarkus.mongodb.reactive.ReactiveMongoCollection;
 import io.smallrye.mutiny.Multi
-import io.smallrye.mutiny.Uni
 import org.bson.types.ObjectId
 import org.eclipse.microprofile.config.inject.ConfigProperty
 import java.util.*
@@ -46,16 +47,19 @@ class MemberRepo {
             .withWriteConcern(WriteConcern.ACKNOWLEDGED)
     }
 
-    fun getUserList(): Uni<List<User>> {
-        return reactiveCollUserModel.find().collect().asList()
+    fun getAllUser(): Multi<User> {
+        return reactiveCollUserModel.find(FindOptions().sort(
+            eq("registeredDate", -1)))
     }
 
-    fun getUser(username: String?): Uni<User?> {
-        return reactiveCollUserModel.find(Filters.eq("username",username)).collect().first()
+    fun getUser(username: String): Multi<User> {
+        val pattern = Pattern.compile("^$username.*\$", Pattern.CASE_INSENSITIVE)
+        val filters = Filters.regex("username",pattern)
+        return reactiveCollUserModel.find(filters)
     }
 
     fun getUserByUserId(userId: String?): Multi<User> {
-        return reactiveCollUserModel.find(Filters.eq("userId",userId))
+        return reactiveCollUserModel.find(eq("userId",userId))
     }
 
     fun insertUser(user: User): User{
@@ -95,11 +99,11 @@ class MemberRepo {
         }
     }
 
-
     data class User(
             var _id: ObjectId? = null,
             var userId: String? = null,
             var username: String? = null,
-            var createDate: Date? = null,
+            var registeredDate: Date? = null,
+            var updateDate: Date? = null,
     )
 }

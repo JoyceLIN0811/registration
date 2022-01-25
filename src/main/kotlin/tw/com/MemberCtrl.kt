@@ -7,6 +7,7 @@ import javax.ws.rs.*
 import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.Response
 import tw.com.MemberRepo.User
+import tw.com.MemberSvc.UserView
 
 
 @Path("/api")
@@ -18,21 +19,11 @@ class MemberCtrl {
     lateinit var memberSvc: MemberSvc
 
     @GET
-    @Path("/userList")
-    fun getUserInfoList(): Uni<List<User>> {
-        return memberSvc.getUsers()
-    }
-
-    @GET
     @Path("/user")
-    fun getUserInfo(
+    fun getUserInfoList(
         @QueryParam("username") username: String?,
-    ): Uni<User?> {
-        if(username != null){
-            return memberSvc.getUserByUserName(username)
-        }else{
-            throw ClientErrorException(Response.status(400,"username is null").build())
-        }
+    ): Uni<List<UserView>> {
+        return memberSvc.getUsers(username)
     }
 
     data class UserRegisterInfo(

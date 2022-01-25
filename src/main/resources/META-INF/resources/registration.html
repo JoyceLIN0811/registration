@@ -27,18 +27,19 @@
     <img src="./static/img/social-media.png" style="width: 80%; height: 80%">
     <h1 class="h3 mb-3 font-weight-normal">建立帳號</h1>
 
-    <div class="input-group mb-3 ml-4" :style="isAvailableUserId == null?'width: 85%':''">
+    <div class="input-group ml-4"
+         :class="isAvailableUserId == false ?'' : 'mb-4'"
+         :style="isAvailableUserId == null?'width: 85%':''">
         <label for="inputUserId" class="sr-only">使用者帳號</label>
-        <input type="text" v-model="userId" id="inputUserId" @change="checkIsExistsUserId"
+        <input type="text" v-model="userId" id="inputUserId" @input="checkIsExistsUserId"
                class="form-control" placeholder="帳號" required autofocus>
         <div class="input-group-append"
-             :style="isAvailableUserId? 'color:green' : 'color:red'"
-             style="font-size: 30px; margin: 7px 5px; padding-left: 5px">
-            <i v-if="isAvailableUserId == true" class="far fa-check-circle"></i>
-            <i v-if="isAvailableUserId == false" class="far fa-times-circle"></i>
+             :style="isAvailableUserId? 'color:green' : 'color:red'">
+            <i v-if="isAvailableUserId == true" class="far fa-check-circle icon"></i>
+            <i v-if="isAvailableUserId == false" class="far fa-times-circle icon"></i>
         </div>
     </div>
-
+    <div v-if="isAvailableUserId == false" style="color: red;"> 此帳號已註冊過</div>
     <label for="inputUsername" class="sr-only">使用者名稱</label>
     <input type="text" v-model="username" id="inputUsername" class="form-control mb-3 ml-4" style="width: 85%;" placeholder="名稱" required>
 

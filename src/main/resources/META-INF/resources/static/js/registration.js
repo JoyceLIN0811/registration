@@ -31,7 +31,6 @@ var app = new Vue({
             fetch("/api/user",{
                 method: 'post',
                 headers: {
-                    // 'Accept': 'application/json',
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(data)
@@ -59,6 +58,8 @@ var app = new Vue({
                 }).then( result =>{
                     this.isAvailableUserId = !!result;
                 })
+            }else {
+                this.isAvailableUserId = null
             }
         }
     }

@@ -17,7 +17,7 @@ class UserCodec: CollectibleCodec<User>  {
         doc["_id"] = user._id
         doc["userId"] = user.userId?:""
         doc["username"] = user.username?:""
-        doc["createDate"] = user.createDate
+        doc["registeredDate"] = user.registeredDate
         documentCodec!!.encode(writer, doc, encoderContext)
     }
 
@@ -48,7 +48,7 @@ class UserCodec: CollectibleCodec<User>  {
         }
         user.userId = document.getString("userId")?:""
         user.username = document.getString("username")?:""
-        user.createDate = document.getDate("createDate")
+        user.registeredDate = document.getDate("registeredDate")
         return user
     }
 }
