@@ -9,7 +9,7 @@
 <body>
 <div id="admin" class="container mt-5">
     <h4><span class="badge badge-pill badge-info">已註冊使用者</span></h4>
-    <div class="d-flex" @keyup.enter="query" style="width: 1500px">
+    <div class="d-flex" @keyup.enter="query">
         <div class="form-row align-items-center">
             <div class="col-auto" style="padding-top: 8px">
                 <input id="filter-username" type="text" autocomplete="off" class="form-control mb-2" placeholder="使用者名稱" v-model="username">
@@ -30,9 +30,9 @@
         </thead>
         <tbody>
         <tr v-for="(user, idx) in users" :key="user.id">
-            <td><div style="height:40px;">{{ user.registeredDate }}</div></td>
-            <td><div style="height:40px;">{{ user.userId }}</div></td>
-            <td><div style="height:40px;">{{ user.username }}</div></td>
+            <td><div>{{ user.registeredDate }}</div></td>
+            <td><div>{{ user.userId }}</div></td>
+            <td><div>{{ user.username }}</div></td>
         </tr>
         </tbody>
     </table>
