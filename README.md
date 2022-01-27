@@ -1,17 +1,25 @@
 # registration Project
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+這是一個不重複使用者 username 註冊申請機制,若遇到重複的 username,則在末尾自
+動後綴阿拉伯數字。
 
-If you want to learn more about Quarkus, please visit its website: https://quarkus.io/ .
+### Data Base 建置需求
+``` shell script
+db.Users.createIndex( { "username": 1 }, { unique: true } )
+```
 
-## Running the application in dev mode
+### Running the application in dev mode
 
 You can run your application in dev mode that enables live coding using:
 ```shell script
 ./gradlew quarkusDev
 ```
 
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at http://localhost:8080/q/dev/.
+### 前端頁面
+``` shell script
+註冊頁： http://localhost:8080/registration.html
+後台頁： http://localhost:8080/back-stage.html
+```
 
 ## Packaging and running the application
 
@@ -31,35 +39,9 @@ If you want to build an _über-jar_, execute the following command:
 
 The application, packaged as an _über-jar_, is now runnable using `java -jar build/*-runner.jar`.
 
-## Creating a native executable
-
-You can create a native executable using: 
-```shell script
-./gradlew build -Dquarkus.package.type=native
+### docker 打包部署
+``` shell script
+docker build -f src/main/docker/Dockerfile.jvm -t quarkus/registration-jvm .
+docker run -i --rm -p 8080:8080 quarkus/registration-jvm
 ```
 
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using: 
-```shell script
-./gradlew build -Dquarkus.package.type=native -Dquarkus.native.container-build=true
-```
-
-You can then execute your native executable with: `./build/registration-1.0.0-SNAPSHOT-runner`
-
-If you want to learn more about building native executables, please consult https://quarkus.io/guides/gradle-tooling.
-
-## Related Guides
-
-- RESTEasy Reactive ([guide](https://quarkus.io/guides/resteasy-reactive)): Reactive implementation of JAX-RS with additional features. This extension is not compatible with the quarkus-resteasy extension, or any of the extensions that depend on it.
-- Kotlin ([guide](https://quarkus.io/guides/kotlin)): Write your services in Kotlin
-
-## Provided Code
-
-### RESTEasy Reactive
-
-Easily start your Reactive RESTful Web Services
-
-[Related guide section...](https://quarkus.io/guides/getting-started-reactive#reactive-jax-rs-resources)
-
-
-db 建置需求
-db.Users.createIndex( { "username": 1 }, { unique: true } )

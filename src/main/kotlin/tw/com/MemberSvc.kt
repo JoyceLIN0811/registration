@@ -14,6 +14,17 @@ class MemberSvc {
     @Inject
     lateinit var memberRepo: MemberRepo
 
+    fun createUserViaReactive(userRegisterInfo: UserRegisterInfo): Uni<User>{
+        val now = Date()
+        val user = User(
+            userId = userRegisterInfo.userId,
+            username = userRegisterInfo.username,
+            registeredDate = now,
+            updateDate = now
+        )
+        return memberRepo.insertUserViaReactive(user)
+    }
+
     fun createUser(userRegisterInfo: UserRegisterInfo): User{
         val now = Date()
         val user = User(
@@ -33,7 +44,7 @@ class MemberSvc {
     fun getUsers(username: String?): Uni<List<UserView>> {
         val sdFormat = SimpleDateFormat("yyyy/MM/dd", Locale.TAIWAN)
         val multiUser = if(username != null){
-            memberRepo.getUser(username)
+            memberRepo.getUserByUserName(username)
         }else{
             memberRepo.getAllUser()
         }

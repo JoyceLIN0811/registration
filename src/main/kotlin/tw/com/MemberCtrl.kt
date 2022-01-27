@@ -42,6 +42,14 @@ class MemberCtrl {
         }
     }
 
+    @POST
+    @Path("/userViaReactive")
+    fun registerViaReactive(
+        @RequestBody userRegisterInfo: UserRegisterInfo
+    ):  Uni<User>{
+        return memberSvc.createUserViaReactive(userRegisterInfo)
+    }
+
     @GET
     @Path("/checkUserId")
     fun checkUserId(
