@@ -44,4 +44,8 @@ The application, packaged as an _über-jar_, is now runnable using `java -jar bu
 docker build -f src/main/docker/Dockerfile.jvm -t quarkus/registration-jvm .
 docker run -i --rm -p 8080:8080 quarkus/registration-jvm
 ```
+### 壓測報告
+``` shell script
+https://docs.google.com/document/d/1FAdPkPwVtrJEROolQ0hhFfjkNeLhH5RDplhmgWUAHoc/edit?usp=sharing
+```
 
