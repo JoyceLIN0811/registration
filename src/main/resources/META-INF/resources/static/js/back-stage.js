@@ -4,7 +4,8 @@ const app = new Vue({
         username:'',
         userList:[],
         currentPage:1,
-        limit:10
+        limit:10,
+        pageLimit:4,
     },
     created() {
         this.query()
@@ -22,6 +23,16 @@ const app = new Vue({
             }
             return Math.ceil(length / this.limit)
         },
+        start: function (){
+            return this.currentPage
+        },
+        end: function (){
+            if(this.currentPage == this.pageLength){
+                return this.userList.length
+            }else {
+                return this.currentPage * 10
+            }
+        },
         users: function (){
             let userList = this.userList
             let end = this.currentPage * this.limit
@@ -30,6 +41,19 @@ const app = new Vue({
         }
     },
     methods: {
+        isVisiblePage: function(page){
+            let isVisible = false
+
+            if(this.currentPage < 5){
+                isVisible = page <= 5
+            } else if(this.pageLength - this.currentPage < 5){
+                isVisible = (this.pageLength - page) < 5
+            } else {
+                isVisible = Math.abs(this.currentPage - page) <= 2
+            }
+
+            return isVisible
+        },
         query: function(){
             let url = `/api/user`
             if(this.username.trim().length > 0){
