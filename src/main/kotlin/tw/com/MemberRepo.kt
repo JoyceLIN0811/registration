@@ -110,13 +110,13 @@ class MemberRepo {
      *  取出 [123,811] => 使用者最後得到的名稱為 "joyce812"
      */
     fun insertByUsernameSeq(user: User){
+        val num = getLastSeq(user.username!!)
         try {
             val insertUser = User()
-            insertUser.username = user.username!!
             insertUser.userId = user.userId
             insertUser.registeredDate = user.registeredDate
             insertUser.updateDate = user.updateDate
-            insertUser.username = getNewUserName(user.username!!)
+            insertUser.username = "${user.username!!}${num}"
 
             val result = collUserModel.insertOne(insertUser)
             if(result.wasAcknowledged()){
@@ -124,15 +124,59 @@ class MemberRepo {
                 user._id = userId
             }
         } catch (e: Exception){
-            println(e.message)
-            insertByUsernameSeq(user)
+//            println(e.message)
+            increaseUsernameSeq(user,num)
+//            insertByUsernameSeq(user)
         }
+    }
+
+    fun increaseUsernameSeq(user: User, seq: Int){
+        val latestSeq = seq + 1
+        try {
+            val insertUser = User(
+                username = "${user.username!!}${latestSeq}",
+                userId = user.userId!!,
+                registeredDate = user.registeredDate!!,
+                updateDate = user.updateDate!!
+            )
+            val result = collUserModel.insertOne(insertUser)
+            if(result.wasAcknowledged()){
+                val userId = result.insertedId!!.asObjectId().value
+                user._id = userId
+            }
+        } catch (e: Exception){
+//            println(e.message)
+            increaseUsernameSeq(user,latestSeq)
+        }
+    }
+
+    fun getLastSeq(username: String): Int{
+        val pattern = Pattern.compile("^$username.*\$", Pattern.CASE_INSENSITIVE)
+        val filters = Filters.regex("username",pattern)
+        val before = System.currentTimeMillis()
+        val list = collUserModel.find(filters).toList()
+        val after = System.currentTimeMillis()
+        println("********************************")
+        println("currentTimeMillis=${after-before}")
+        val numList = mutableListOf<Int>()
+        list.forEach {
+            val result = convertStringToInt(it.username!!.substringAfter(username))
+            if(result != null){
+                numList.add(result)
+            }
+        }
+        var num = numList.maxOrNull()?:1
+        return ++num
     }
 
     fun getNewUserName(username: String): String{
         val pattern = Pattern.compile("^$username.*\$", Pattern.CASE_INSENSITIVE)
         val filters = Filters.regex("username",pattern)
+        val before = System.currentTimeMillis()
         val list = collUserModel.find(filters).toList()
+        val after = System.currentTimeMillis()
+        println("********************************")
+        println("currentTimeMillis=${after-before}")
         val numList = mutableListOf<Int>()
         list.forEach {
             val result = convertStringToInt(it.username!!.substringAfter(username))
